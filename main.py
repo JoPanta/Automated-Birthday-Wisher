@@ -22,34 +22,24 @@ birthday_dict = df.to_dict(orient="records")
 
 # turning the txt files int a list:
 
-letters_list = []
 
-with open("letter_templates/letter_1.txt") as file:
-    letter1 = file.read()
-    letters_list.append(letter1)
+with open(f"letter_templates/letter_{random.randint(1, 3)}.txt") as file:
+    letter = file.read()
 
-with open("letter_templates/letter_2.txt") as file:
-    letter2 = file.read()
-    letters_list.append(letter2)
-
-with open("letter_templates/letter_3.txt") as file:
-    letter3 = file.read()
-    letters_list.append(letter3)
-
-chosen_letter = letters_list[random.randint(0, 2)]
-print(chosen_letter)
+print(letter)
 
 # sending the email
 
 for person in birthday_dict:
-    if person["day"] == day:
+    if person["day"] == day and person["month"] == month:
+        NAME = person["name"]
         with smtplib.SMTP("smtp.gmail.com") as connection:
             connection.starttls()
             connection.login(user=my_email, password=password)
             connection.sendmail(from_addr=my_email,
                                 to_addrs=f"{person['email']}",
-                                msg=f"Subject: Happy Birthday {person['name']}\n\n"
-                                    f"{chosen_letter.replace('[NAME]', person['name'])}")
+                                msg=f"Subject: Happy Birthday {NAME}\n\n"
+                                    f"{letter.replace('[NAME]', NAME)}")
 
 
 # 2. Check if today matches a birthday in the birthdays.csv
